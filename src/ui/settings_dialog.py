@@ -41,6 +41,7 @@ class SettingsDialog(ctk.CTkToplevel):
         on_action_changed: Optional[Callable] = None,
         on_onedrive_changed: Optional[Callable] = None,
         on_config_path_changed: Optional[Callable] = None,
+        initial_tab: str = "General",
         **kwargs,
     ):
         super().__init__(master, **kwargs)
@@ -55,32 +56,12 @@ class SettingsDialog(ctk.CTkToplevel):
         self.minsize(600, 600)
         self.transient(master)
         
-        # Hide window immediately to prevent flashing before centering
-        self.withdraw()
-
         self._setup_ui(current_theme, current_action, onedrive_path, config_path)
         
-        # Center the window and show it
-        self.after(50, self._center_window)
-
-    def _center_window(self) -> None:
-        """Center the dialog on the parent window and make it visible."""
-        if not self.winfo_exists():
-            return
-            
-        self.update_idletasks()
-        parent = self.master
-        px = parent.winfo_rootx()
-        py = parent.winfo_rooty()
-        pw = parent.winfo_width()
-        ph = parent.winfo_height()
-        w = self.winfo_width()
-        h = self.winfo_height()
-        x = px + (pw - w) // 2
-        y = py + (ph - h) // 2
-        
-        self.geometry(f"+{x}+{y}")
-        self.deiconify()
+        try:
+            self.tabview.set(initial_tab)
+        except Exception:
+            pass
 
     def _setup_ui(
         self,
@@ -176,8 +157,8 @@ class SettingsDialog(ctk.CTkToplevel):
                 text_color=("gray20", "gray90"), command=cmd
             ).pack(side="left", padx=4)
 
-        # Card container for Category and Patterns
-        card = self._create_card(parent, "")
+        # Category and Patterns directly in parent (no extra card wrapper)
+        card = parent
         
         # Category Selector
         cat_frame = ctk.CTkFrame(card, fg_color="transparent")

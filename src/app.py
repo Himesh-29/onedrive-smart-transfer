@@ -42,26 +42,17 @@ def run_first_setup(config: ConfigManager) -> None:
     root = ctk.CTk()
     root.withdraw()
 
-    # Step 1: Ask where to store config
+    # Step 1: Tell user about settings
     messagebox.showinfo(
         "Welcome to OneDrive Smart Transfer",
-        "Welcome! Before we begin, please choose where to store your settings.\n\n"
-        "This includes your exclusion patterns, theme preferences, and other settings.\n"
-        "A simple JSON file will be created at the location you choose.",
+        "Welcome! Before we begin, we need to locate your OneDrive folder.\n\n"
+        "Your settings and exclusions will be saved automatically.",
         parent=root,
     )
 
     default_dir = config.get_default_config_dir()
-    config_dir = filedialog.askdirectory(
-        title="Choose Settings Storage Location",
-        initialdir=os.path.dirname(default_dir),
-        parent=root,
-    )
-
-    if not config_dir:
-        config_dir = default_dir
-
-    config_path = os.path.join(config_dir, "onedrive_smart_transfer_config.json")
+    os.makedirs(default_dir, exist_ok=True)
+    config_path = os.path.join(default_dir, "onedrive_smart_transfer_config.json")
     config.config_path = config_path
 
     # Step 2: Detect and confirm OneDrive path

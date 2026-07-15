@@ -53,6 +53,7 @@ class MainWindow(ctk.CTk, TkinterDnD.DnDWrapper):
         self._source_items: list[str] = []
         self._dest_path: str = ""
         self._current_action = TransferAction.COPY if self._config.default_action == "copy" else TransferAction.MOVE
+        self._settings_dialog = None
 
         # Window setup
         self.title("⚡ OneDrive Smart Transfer")
@@ -96,26 +97,33 @@ class MainWindow(ctk.CTk, TkinterDnD.DnDWrapper):
         )
         title_label.pack(side="left", padx=16)
 
+        # Use Segoe UI Symbol font to force monochrome text rendering of icons
+        _icon_font = ctk.CTkFont(family="Segoe UI Symbol", size=16)
+
         settings_btn = ctk.CTkButton(
             header,
-            text="⚙",
-            width=36,
-            height=36,
-            font=ctk.CTkFont(size=18),
+            text="\u2699\uFE0E",
+            width=28,
+            height=28,
+            font=_icon_font,
             fg_color="transparent",
             hover_color=("gray80", "gray30"),
+            text_color=("#1a1a1a", "#e0e0e0"),
+            corner_radius=6,
             command=self._open_settings,
         )
-        settings_btn.pack(side="right", padx=(0, 12))
+        settings_btn.pack(side="right", padx=(0, 8))
 
         self._theme_btn = ctk.CTkButton(
             header,
-            text="🌙" if theme_manager.get_effective_mode() == "light" else "☀️",
-            width=36,
-            height=36,
-            font=ctk.CTkFont(size=18),
+            text=self._get_theme_icon(),
+            width=28,
+            height=28,
+            font=_icon_font,
             fg_color="transparent",
             hover_color=("gray80", "gray30"),
+            text_color=("#1a1a1a", "#e0e0e0"),
+            corner_radius=6,
             command=self._toggle_theme,
         )
         self._theme_btn.pack(side="right", padx=(0, 4))
@@ -148,14 +156,14 @@ class MainWindow(ctk.CTk, TkinterDnD.DnDWrapper):
 
         self._manage_exc_btn = ctk.CTkButton(
             source_btns_frame,
-            text="⚙ Exclusions",
-            width=90,
+            text="Manage Exclusions",
+            width=120,
             height=24,
-            font=ctk.CTkFont(size=11),
+            font=ctk.CTkFont(size=11, weight="bold"),
             fg_color=("gray75", "gray30"),
             hover_color=("gray65", "gray40"),
             text_color=("gray20", "gray90"),
-            command=self._open_settings,
+            command=lambda: self._open_settings(initial_tab="Exclusions"),
         )
         self._manage_exc_btn.pack(side="right")
 
@@ -226,9 +234,16 @@ class MainWindow(ctk.CTk, TkinterDnD.DnDWrapper):
         if self._dest_path:
             self._dest_explorer.load_destination(onedrive_path)
 
-        # ── 3. Transfer Queue ──
+        # ── 3. Transfer Summary (above queue) ──
+        summary_frame = ctk.CTkFrame(self, fg_color="transparent")
+        summary_frame.grid(row=2, column=0, sticky="ew", padx=12, pady=(0, 4))
+        
+        self._summary_widget = TransferSummaryWidget(summary_frame, corner_radius=8)
+        self._summary_widget.pack(fill="x")
+
+        # ── 4. Transfer Queue ──
         queue_frame = ctk.CTkFrame(self, fg_color="transparent")
-        queue_frame.grid(row=2, column=0, sticky="ew", padx=12, pady=4)
+        queue_frame.grid(row=3, column=0, sticky="ew", padx=12, pady=4)
         
         self._queue_widget = TransferQueue(
             queue_frame,
@@ -237,13 +252,6 @@ class MainWindow(ctk.CTk, TkinterDnD.DnDWrapper):
             height=150
         )
         self._queue_widget.pack(fill="x")
-
-        # ── 4. Transfer Summary ──
-        summary_frame = ctk.CTkFrame(self, fg_color="transparent")
-        summary_frame.grid(row=3, column=0, sticky="ew", padx=12, pady=(0, 4))
-        
-        self._summary_widget = TransferSummaryWidget(summary_frame, corner_radius=8)
-        self._summary_widget.pack(fill="x")
 
         # ── 5. Action Bar ──
         action_bar = ctk.CTkFrame(self, height=60, corner_radius=0)
@@ -407,13 +415,32 @@ class MainWindow(ctk.CTk, TkinterDnD.DnDWrapper):
             self._source_explorer.load_sources(self._source_items)
             self._summary_widget.calculate_stats(self._source_items, self._source_explorer._get_root_exclusions)
 
+    def _get_theme_icon(self) -> str:
+        """Get the icon for the theme toggle button."""
+        return "\u2600\uFE0E" if theme_manager.get_effective_mode() == "dark" else "\u263E\uFE0E"
+
     def _toggle_theme(self) -> None:
+        """Toggle theme — just changes colors in place, no restart."""
         new_mode = theme_manager.toggle()
-        self._theme_btn.configure(text="🌙" if new_mode == "light" else "☀️")
+        self._theme_btn.configure(text=self._get_theme_icon())
         self._config.theme = new_mode
 
-    def _open_settings(self) -> None:
-        SettingsDialog(
+    def _on_settings_closed(self) -> None:
+        """Called when the settings dialog is closed by the user."""
+        self._settings_dialog = None
+
+    def _open_settings(self, initial_tab: str = "General") -> None:
+        # If dialog exists, try to focus it
+        if self._settings_dialog is not None:
+            try:
+                self._settings_dialog.focus_force()
+                self._settings_dialog.tabview.set(initial_tab)
+                return
+            except Exception:
+                # Dialog is dead (zombie from theme change or user closed it)
+                self._settings_dialog = None
+
+        dialog = SettingsDialog(
             self,
             exclusion_manager=self._exclusion_mgr,
             current_theme=theme_manager.current_mode,
@@ -423,11 +450,16 @@ class MainWindow(ctk.CTk, TkinterDnD.DnDWrapper):
             on_theme_changed=self._on_theme_setting_changed,
             on_action_changed=self._on_action_setting_changed,
             on_onedrive_changed=self._on_onedrive_setting_changed,
+            initial_tab=initial_tab
         )
+        self._settings_dialog = dialog
+        # Track when the user closes the dialog so we can clear the reference
+        dialog.protocol("WM_DELETE_WINDOW", lambda: [dialog.destroy(), self._on_settings_closed()])
 
     def _on_theme_setting_changed(self, mode: str) -> None:
+        """Theme changed from settings — just update colors, no restart."""
         theme_manager.set_mode(mode)
-        self._theme_btn.configure(text="🌙" if theme_manager.get_effective_mode() == "light" else "☀️")
+        self._theme_btn.configure(text=self._get_theme_icon())
         self._config.theme = mode
 
     def _on_action_setting_changed(self, action: str) -> None:
