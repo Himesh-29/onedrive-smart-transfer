@@ -1,0 +1,5 @@
+customtkinter>=5.2.0
+tkinterdnd2>=0.4.2
+darkdetect>=0.8.0
+pyinstaller>=6.0
+pillow>=10.0.0

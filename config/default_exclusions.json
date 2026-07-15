@@ -1,0 +1,352 @@
+{
+  "javascript_node": {
+    "name": "JavaScript / Node.js",
+    "marker_files": [
+      "package.json",
+      "package-lock.json",
+      "yarn.lock",
+      "pnpm-lock.yaml",
+      "bun.lockb",
+      ".npmrc"
+    ],
+    "exclude_dirs": [
+      "node_modules",
+      ".next",
+      ".nuxt",
+      "dist",
+      ".cache",
+      ".parcel-cache",
+      ".turbo",
+      ".svelte-kit",
+      ".output",
+      "storybook-static",
+      "coverage",
+      ".docusaurus",
+      ".temp",
+      ".contentlayer"
+    ],
+    "exclude_files": []
+  },
+  "typescript": {
+    "name": "TypeScript",
+    "marker_files": [
+      "tsconfig.json",
+      "tsconfig.build.json"
+    ],
+    "exclude_dirs": [
+      "node_modules",
+      "dist",
+      "build",
+      ".tsbuildinfo"
+    ],
+    "exclude_files": [
+      "*.tsbuildinfo"
+    ]
+  },
+  "python": {
+    "name": "Python",
+    "marker_files": [
+      "requirements.txt",
+      "pyproject.toml",
+      "Pipfile",
+      "setup.py",
+      "setup.cfg",
+      "poetry.lock",
+      "uv.lock",
+      "tox.ini"
+    ],
+    "exclude_dirs": [
+      "venv",
+      ".venv",
+      "env",
+      ".env",
+      "__pycache__",
+      ".eggs",
+      ".tox",
+      ".nox",
+      ".mypy_cache",
+      ".pytest_cache",
+      ".ruff_cache",
+      "htmlcov",
+      ".hypothesis",
+      ".pytype",
+      "site-packages"
+    ],
+    "exclude_files": [
+      "*.pyc",
+      "*.pyo",
+      "*.egg-info",
+      "*.egg"
+    ]
+  },
+  "java_kotlin": {
+    "name": "Java / Kotlin",
+    "marker_files": [
+      "pom.xml",
+      "build.gradle",
+      "build.gradle.kts",
+      "settings.gradle",
+      "settings.gradle.kts",
+      "gradlew"
+    ],
+    "exclude_dirs": [
+      "target",
+      "build",
+      "out",
+      ".gradle",
+      ".mvn",
+      "bin"
+    ],
+    "exclude_files": [
+      "*.class",
+      "*.jar",
+      "*.war",
+      "*.ear"
+    ]
+  },
+  "csharp_dotnet": {
+    "name": "C# / .NET",
+    "marker_files": [
+      "*.csproj",
+      "*.sln",
+      "*.fsproj",
+      "global.json",
+      "nuget.config"
+    ],
+    "exclude_dirs": [
+      "bin",
+      "obj",
+      "packages",
+      ".vs",
+      "TestResults"
+    ],
+    "exclude_files": [
+      "*.dll",
+      "*.pdb",
+      "*.nupkg"
+    ]
+  },
+  "cpp_c": {
+    "name": "C / C++",
+    "marker_files": [
+      "CMakeLists.txt",
+      "Makefile",
+      "*.vcxproj",
+      "meson.build",
+      "conanfile.txt",
+      "conanfile.py"
+    ],
+    "exclude_dirs": [
+      "build",
+      "cmake-build-debug",
+      "cmake-build-release",
+      "out",
+      ".vs",
+      "Debug",
+      "Release",
+      "x64",
+      "x86"
+    ],
+    "exclude_files": [
+      "*.o",
+      "*.obj",
+      "*.a",
+      "*.lib",
+      "*.so",
+      "*.dylib",
+      "*.exe"
+    ]
+  },
+  "rust": {
+    "name": "Rust",
+    "marker_files": [
+      "Cargo.toml",
+      "Cargo.lock"
+    ],
+    "exclude_dirs": [
+      "target"
+    ],
+    "exclude_files": []
+  },
+  "golang": {
+    "name": "Go",
+    "marker_files": [
+      "go.mod",
+      "go.sum"
+    ],
+    "exclude_dirs": [
+      "vendor"
+    ],
+    "exclude_files": []
+  },
+  "flutter_dart": {
+    "name": "Flutter / Dart",
+    "marker_files": [
+      "pubspec.yaml",
+      "pubspec.lock",
+      "analysis_options.yaml"
+    ],
+    "exclude_dirs": [
+      ".dart_tool",
+      "build",
+      ".fvm",
+      "ios/Pods",
+      "android/.gradle",
+      ".pub-cache"
+    ],
+    "exclude_files": []
+  },
+  "ruby": {
+    "name": "Ruby",
+    "marker_files": [
+      "Gemfile",
+      "Gemfile.lock",
+      "Rakefile"
+    ],
+    "exclude_dirs": [
+      "vendor/bundle",
+      ".bundle",
+      "tmp",
+      "log"
+    ],
+    "exclude_files": []
+  },
+  "php": {
+    "name": "PHP",
+    "marker_files": [
+      "composer.json",
+      "composer.lock"
+    ],
+    "exclude_dirs": [
+      "vendor"
+    ],
+    "exclude_files": []
+  },
+  "elixir_erlang": {
+    "name": "Elixir / Erlang",
+    "marker_files": [
+      "mix.exs",
+      "mix.lock",
+      "rebar.config"
+    ],
+    "exclude_dirs": [
+      "_build",
+      "deps",
+      ".elixir_ls",
+      ".fetch"
+    ],
+    "exclude_files": [
+      "*.beam"
+    ]
+  },
+  "swift_ios": {
+    "name": "Swift / iOS",
+    "marker_files": [
+      "Package.swift",
+      "Podfile",
+      "Cartfile"
+    ],
+    "exclude_dirs": [
+      "DerivedData",
+      ".build",
+      "Pods",
+      "Carthage/Build"
+    ],
+    "exclude_files": []
+  },
+  "android": {
+    "name": "Android",
+    "marker_files": [
+      "build.gradle",
+      "settings.gradle",
+      "gradlew",
+      "AndroidManifest.xml"
+    ],
+    "exclude_dirs": [
+      ".gradle",
+      "build",
+      "app/build",
+      ".idea",
+      "captures"
+    ],
+    "exclude_files": [
+      "*.apk",
+      "*.aab"
+    ]
+  },
+  "unity": {
+    "name": "Unity",
+    "marker_files": [
+      "ProjectSettings/ProjectVersion.txt",
+      "Assembly-CSharp.csproj"
+    ],
+    "exclude_dirs": [
+      "Library",
+      "Temp",
+      "Obj",
+      "Build",
+      "Builds",
+      "Logs",
+      "UserSettings"
+    ],
+    "exclude_files": []
+  },
+  "unreal_engine": {
+    "name": "Unreal Engine",
+    "marker_files": [
+      "*.uproject"
+    ],
+    "exclude_dirs": [
+      "Binaries",
+      "DerivedDataCache",
+      "Intermediate",
+      "Saved"
+    ],
+    "exclude_files": []
+  },
+  "terraform": {
+    "name": "Terraform / IaC",
+    "marker_files": [
+      "main.tf",
+      "terraform.tfvars",
+      "*.tf"
+    ],
+    "exclude_dirs": [
+      ".terraform"
+    ],
+    "exclude_files": [
+      "*.tfstate",
+      "*.tfstate.backup"
+    ]
+  },
+  "docker": {
+    "name": "Docker",
+    "marker_files": [
+      "Dockerfile",
+      "docker-compose.yml",
+      "docker-compose.yaml",
+      ".dockerignore"
+    ],
+    "exclude_dirs": [],
+    "exclude_files": []
+  },
+  "general_always": {
+    "name": "General (Always Applied)",
+    "marker_files": [],
+    "exclude_dirs": [
+      ".sass-cache",
+      ".cache",
+      "tmp",
+      ".temp"
+    ],
+    "exclude_files": [
+      "*.log",
+      "*.tmp",
+      "*.swp",
+      "*.swo",
+      "desktop.ini",
+      "Thumbs.db",
+      ".DS_Store"
+    ]
+  }
+}

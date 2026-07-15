@@ -1,0 +1,25 @@
+# Virtual environment
+venv/
+.venv/
+
+# PyInstaller build artifacts
+dist/
+build/
+*.spec
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Environment files
+.env
+
+# IDE settings (optional — user can remove this if they want .idea/.vscode tracked)
+.idea/
+
+# OS generated files
+Thumbs.db
+desktop.ini
+.DS_Store
