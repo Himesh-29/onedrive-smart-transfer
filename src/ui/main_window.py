@@ -421,23 +421,46 @@ class MainWindow(ctk.CTk, TkinterDnD.DnDWrapper):
 
     def _toggle_theme(self) -> None:
         """Toggle theme — just changes colors in place, no restart."""
-        new_mode = theme_manager.toggle()
-        self._theme_btn.configure(text=self._get_theme_icon())
-        self._config.theme = new_mode
+        self._apply_theme_change(theme_manager.toggle())
 
-    def _on_settings_closed(self) -> None:
-        """Called when the settings dialog is closed by the user."""
-        self._settings_dialog = None
+    def _apply_theme_change(self, mode: str) -> None:
+        """Apply a theme change, preserving the settings dialog if open."""
+        # Remember if settings was open (and which tab) so we can reopen it
+        settings_was_open = False
+        settings_tab = "General"
+        if self._settings_dialog is not None and self._settings_dialog.winfo_exists():
+            settings_was_open = True
+            try:
+                settings_tab = self._settings_dialog.tabview.get()
+            except Exception:
+                pass
+            try:
+                self._settings_dialog.destroy()
+            except Exception:
+                pass
+            self._settings_dialog = None
+
+        # Apply the theme
+        theme_manager.set_mode(mode)
+        self._theme_btn.configure(text=self._get_theme_icon())
+        self._config.theme = mode
+
+        # Reopen settings dialog on the same tab after a short delay
+        if settings_was_open:
+            self.after(100, lambda: self._open_settings(initial_tab=settings_tab))
 
     def _open_settings(self, initial_tab: str = "General") -> None:
-        # If dialog exists, try to focus it
+        # Use winfo_exists() — the standard Tkinter way to check if a widget is alive
         if self._settings_dialog is not None:
-            try:
-                self._settings_dialog.focus_force()
-                self._settings_dialog.tabview.set(initial_tab)
+            if self._settings_dialog.winfo_exists():
+                self._settings_dialog.focus()
+                try:
+                    self._settings_dialog.tabview.set(initial_tab)
+                except Exception:
+                    pass
                 return
-            except Exception:
-                # Dialog is dead (zombie from theme change or user closed it)
+            else:
+                # Window was destroyed (theme change, user closed, etc.)
                 self._settings_dialog = None
 
         dialog = SettingsDialog(
@@ -453,14 +476,12 @@ class MainWindow(ctk.CTk, TkinterDnD.DnDWrapper):
             initial_tab=initial_tab
         )
         self._settings_dialog = dialog
-        # Track when the user closes the dialog so we can clear the reference
-        dialog.protocol("WM_DELETE_WINDOW", lambda: [dialog.destroy(), self._on_settings_closed()])
+        # Clear the reference when the user manually closes the dialog
+        dialog.protocol("WM_DELETE_WINDOW", lambda: [dialog.destroy(), setattr(self, '_settings_dialog', None)])
 
     def _on_theme_setting_changed(self, mode: str) -> None:
-        """Theme changed from settings — just update colors, no restart."""
-        theme_manager.set_mode(mode)
-        self._theme_btn.configure(text=self._get_theme_icon())
-        self._config.theme = mode
+        """Theme changed from settings — destroy dialog, apply, reopen on same tab."""
+        self._apply_theme_change(mode)
 
     def _on_action_setting_changed(self, action: str) -> None:
         self._action_var.set(action)
