@@ -2,7 +2,7 @@
 
 A simple Windows app to copy your coding projects to OneDrive without backing up all the heavy build files. It automatically skips folders like `node_modules`, `venv`, and `build` so your OneDrive doesn't fill up instantly.
 
-![App Demo](https://github.com/user-attachments/assets/4fd5fb87-206f-4494-9d8a-6036497f8567#.png)
+![App Demo](https://raw.githubusercontent.com/Himesh-29/onedrive-smart-transfer/main/assets/docs/Transfer%20Completed.png)
 
 ## Why this exists
 
@@ -33,13 +33,13 @@ When you launch the app for the very first time, it will prompt you to choose a 
 
 _How it works behind the scenes:_ Because this app is fully portable and respects your privacy (no Registry entries or hidden AppData files), it will generate a tiny text file named `ost_config_path.txt` right next to the `.exe` file. This file acts as a simple pointer so the application remembers where you decided to save your settings on this specific computer. If you ever want to reset the application, simply delete this text file!
 
-![Configuration File Setup Location](https://github.com/user-attachments/assets/8abc35c5-30a4-41c1-9ab1-fb2f532307e2#.png)
-![OneDrive Location Detection/Updation](https://github.com/user-attachments/assets/5b942994-a776-4772-8860-2057f8b450d9#.png)
+![Configuration File Setup Location](https://raw.githubusercontent.com/Himesh-29/onedrive-smart-transfer/main/assets/docs/Configuration%20File%20Setup%20Location.png)
+![OneDrive Location Detection or Updation](https://raw.githubusercontent.com/Himesh-29/onedrive-smart-transfer/main/assets/docs/OneDrive%20Location%20Detection%20or%20Updation.png)
 
 **Step 3: Main Window Preview**
 Drag and drop your project folder directly into the main window. The application will instantly scan the folder to detect what programming language it uses (like Node.js or Python).
 
-![Main Window Placeholder](https://github.com/user-attachments/assets/e2903b8b-19ce-4bd7-b305-d10e1bbc8f4d#.png)
+![Main Window Placeholder](https://raw.githubusercontent.com/Himesh-29/onedrive-smart-transfer/main/assets/docs/Main%20Window%20Placeholder.png)
 
 **Step 4: Choose a Destination**
 Select a destination folder inside your local OneDrive directory. This is where your cleaned-up project will be copied or moved to.
@@ -47,9 +47,9 @@ Select a destination folder inside your local OneDrive directory. This is where 
 **Step 5: Review and Transfer**
 Before doing anything, the application will show you a preview tree of exactly which files it plans to transfer and which heavy build folders (like `node_modules` or `venv`) it plans to skip. Once you're satisfied, click start to begin the background transfer process!
 
-![Settings General Window](https://github.com/user-attachments/assets/a303ec2e-102c-44a7-a5d7-fe4f554a2951#.png)
-![Settings Exclusions Window](https://github.com/user-attachments/assets/06d04bb2-4bb9-4d0c-8f57-4dcdc4aa4887#.png)
-![Transfer Completed](https://github.com/user-attachments/assets/4fd5fb87-206f-4494-9d8a-6036497f8567#.png)
+![Settings General Window](https://raw.githubusercontent.com/Himesh-29/onedrive-smart-transfer/main/assets/docs/Settings%20General%20Window.png)
+![Settings Exclusions Window](https://raw.githubusercontent.com/Himesh-29/onedrive-smart-transfer/main/assets/docs/Settings%20Exclusions%20Window.png)
+![Transfer Completed](https://raw.githubusercontent.com/Himesh-29/onedrive-smart-transfer/main/assets/docs/Transfer%20Completed.png)
 
 ## Supported Projects
 

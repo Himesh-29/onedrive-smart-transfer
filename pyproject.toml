@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "onedrive-smart-transfer"
-version = "1.0.0"
+version = "1.0.2"
 description = "A Windows desktop application for transferring project files to OneDrive while automatically excluding bloated build artifacts."
 readme = {file = "README.md", content-type = "text/markdown"}
 authors = [
