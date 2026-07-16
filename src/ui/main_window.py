@@ -60,6 +60,23 @@ class MainWindow(ctk.CTk, TkinterDnD.DnDWrapper):
         self.geometry("1000x800")
         self.minsize(800, 650)
 
+        import sys
+        import ctypes
+        from src.utils.resource_path import resource_path
+
+        # Set AppUserModelID so Windows groups the taskbar icon correctly
+        if sys.platform == "win32":
+            myappid = "onedrivesmarttransfer.app.1.0"
+            try:
+                ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+            except Exception:
+                pass
+
+        # Set window icon
+        icon_path = resource_path(os.path.join("assets", "icon.ico"))
+        if os.path.exists(icon_path):
+            self.iconbitmap(icon_path)
+
         # Restore window geometry if saved
         saved_geometry = self._config.get("window_geometry")
         if saved_geometry:

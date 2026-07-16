@@ -38,6 +38,7 @@ def build():
         "--collect-all", "tkinterdnd2",
         "--collect-all", "darkdetect",
         "--add-data", f"{os.path.join(project_root, 'config')};config",
+        "--add-data", f"{os.path.join(project_root, 'assets')};assets",
         "--name", "OneDriveSmartTransfer",
         "--clean",
         os.path.join(project_root, "src", "app.py"),

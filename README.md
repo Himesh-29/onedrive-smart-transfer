@@ -1,136 +1,94 @@
-# ⚡ OneDrive Smart Transfer
+# OneDrive Smart Transfer
 
-A **free, open-source, offline-only** Windows desktop application for transferring project files to OneDrive Personal — while **automatically excluding** bloated build artifacts like `node_modules`, `venv`, `__pycache__`, `.next`, `build`, and more.
+A simple Windows app to copy your coding projects to OneDrive without backing up all the heavy build files. It automatically skips folders like `node_modules`, `venv`, and `build` so your OneDrive doesn't fill up instantly.
 
-## 🎯 What It Does
+![App Demo GIF](https://github.com/placeholder-demo-gif.gif)
+*(Placeholder: Upload a short GIF of a transfer here)*
 
-Drop your project folders from Downloads (or anywhere), pick a destination in your OneDrive, and hit **Transfer**. The app automatically detects your tech stack and filters out framework-generated folders that waste OneDrive storage.
+## Why this exists
 
-## ✨ Features
+When you sync programming projects to OneDrive, it usually tries to upload thousands of tiny files from dependency folders. This takes forever and wastes space. This app detects what kind of project you're dropping in and automatically filters out the junk before transferring. 
 
-- **🖱 Drag & Drop** — Drop files/folders directly from Windows File Explorer
-- **🧠 Smart Tech Stack Detection** — Automatically identifies Node.js, Python, Java, Rust, Flutter, Go, C#, C++, Ruby, PHP, and more from marker files (e.g., `package.json`, `Cargo.toml`)
-- **🚫 Auto-Exclusion** — Skips `node_modules`, `venv`, `__pycache__`, `build`, `target`, `.gradle`, and 100+ other build artifacts
-- **📋 Fully Configurable** — Add, remove, or toggle any exclusion pattern via a simple UI (even a 5-year-old can use it!)
-- **📦 Copy or Move** — Choose to keep originals or move them
-- **📊 WinSCP-Style Transfer Queue** — Multiple background transfers with individual progress bars, speed, and ETA
-- **⚠ Windows-Style Error Handling** — Retry / Skip / Skip All prompts when files fail
-- **🎨 Light & Dark Mode** — Follows your Windows system theme, or switch manually
-- **🔒 Privacy First** — 100% offline, no telemetry, no file contents read, no registry access
-- **💾 Persistent Settings** — Your exclusion patterns and preferences survive app restarts
+Everything runs completely offline on your machine. No data is sent anywhere.
 
-## 🔒 Privacy & Security
+## Features
 
-This application is designed with privacy as a core principle:
+- **Drag and Drop**: Move files and folders directly from Windows File Explorer into the application.
+- **Smart Tech Stack Detection**: Automatically identifies the type of project (Node.js, Python, Java, Rust, Flutter, Go, C#, C++, Ruby, PHP, etc.) based on standard marker files like `package.json` or `Cargo.toml`.
+- **Auto-Exclusion**: Automatically skips over 100 common build artifacts including `node_modules`, `venv`, `__pycache__`, `build`, `target`, and `.gradle`.
+- **Fully Configurable**: Easily add, remove, or toggle exclusion patterns through a simple interface.
+- **Copy or Move**: Choose whether to keep the original files where they are or move them to the destination.
+- **Background Transfer Queue**: Run multiple transfers simultaneously. The queue provides individual progress bars, transfer speeds, and estimated completion times.
+- **Native Error Handling**: When a file fails to transfer, you'll get standard Windows-style prompts to Retry, Skip, or Skip All.
+- **System Theme Support**: The interface automatically matches your Windows light or dark mode setting, or you can change it manually.
+- **Privacy First**: Operates 100% offline. It does not read your file contents, access your registry, or send any telemetry.
+- **Persistent Settings**: Your preferences and exclusion rules are saved and will still be there the next time you open the app.
 
-| Principle | Implementation |
-|---|---|
-| **100% Offline** | No network calls. No telemetry. No analytics. Works without internet. |
-| **No File Content Reading** | Only file/directory *names* and sizes are inspected. Contents are never read. |
-| **No Registry Access** | OneDrive is detected via environment variables. If detection fails, you're asked to browse. |
-| **No Hardcoded Paths** | All paths are dynamically resolved. No usernames or machine-specific data in source code. |
-| **User Controls Everything** | The app asks for every piece of information it needs. Nothing happens behind the scenes. |
+## Setup and Usage
 
-## 🚀 Quick Start
+**Step 1: Download and Run**
+Grab the latest `OneDriveSmartTransfer-Windows.zip` from the Releases page, extract it, and double-click `OneDriveSmartTransfer.exe`. There is no installer.
 
-### Run from Source (Development)
+**Step 2: First-Time Configuration**
+When you open it for the first time, the app will ask where you want to save its configuration files. It's usually best to select a folder inside your OneDrive so your settings are backed up and synced across your computers.
 
-```bash
-# 1. Clone the repo
-git clone https://github.com/your-username/onedrive-smart-transfer.git
-cd onedrive-smart-transfer
+![Welcome Screen](https://github.com/user-attachments/assets/8abc35c5-30a4-41c1-9ab1-fb2f532307e2)
+![Configuration File Setup Location](https://github.com/user-attachments/assets/8abc35c5-30a4-41c1-9ab1-fb2f532307e2)
 
-# 2. Create a virtual environment
-python -m venv venv
-venv\Scripts\activate   # On Windows
 
-# 3. Install dependencies
-pip install -r requirements.txt
+**Step 3: Transferring Files**
+Drag and drop your project folder directly into the main window. 
 
-# 4. Run the app
-python src/app.py
-```
+![Main Window Placeholder](https://github.com/placeholder-main-window.png)
+*(Placeholder: Screenshot of the main drop zone)*
 
-### Build Standalone .exe
+**Step 4: Choose Destination**
+Select where inside your OneDrive you want the project to go.
 
-```bash
-# Build with PyInstaller
-python build_exe.py
+**Step 5: Review and Start**
+The app will show you exactly which files it's going to transfer and which ones it's going to skip. You can edit the exclusion list in the settings if you need to. Click start when you're ready.
 
-# Output: dist/OneDriveSmartTransfer/OneDriveSmartTransfer.exe
-```
+![Settings Placeholder](https://github.com/placeholder-settings-screen.png)
+*(Placeholder: Screenshot of the settings/exclusion rules window)*
 
-### Create Windows Installer
+## Supported Projects
 
-1. Install [Inno Setup](https://jrsoftware.org/isdl.php)
-2. Open `installer/setup_script.iss` in Inno Setup Compiler
-3. Click Build → the installer `.exe` will be in `installer/output/`
+The app automatically recognizes and filters out build files for:
+- Node.js / JavaScript (`node_modules`, `.next`, etc)
+- Python (`venv`, `__pycache__`, `dist`, etc)
+- Java (`target`, `build`, etc)
+- C# / .NET (`bin`, `obj`, etc)
+- C / C++ (`build`, `Debug`, etc)
+- Rust (`target`)
+- Go (`vendor`)
+- And many others (PHP, Ruby, Flutter, Android, iOS, Unity).
 
-## 📁 Project Structure
+Note: Version control folders like `.git` are kept by default since you usually want those backed up.
 
-```
-OneDrive-Smart-Transfer/
-├── src/
-│   ├── app.py                    # Entry point with first-run wizard
-│   ├── ui/
-│   │   ├── main_window.py        # Main window (drop zone, preview, queue)
-│   │   ├── drop_zone.py          # Drag-and-drop widget
-│   │   ├── destination_picker.py # OneDrive folder browser
-│   │   ├── transfer_preview.py   # File tree with exclusion indicators
-│   │   ├── transfer_queue.py     # WinSCP-style background job queue
-│   │   ├── settings_dialog.py    # Exclusion editor + preferences
-│   │   └── theme_manager.py      # Light/Dark/System theme
-│   ├── core/
-│   │   ├── config_manager.py     # User settings persistence
-│   │   ├── exclusion_manager.py  # Config-driven exclusion patterns
-│   │   ├── stack_detector.py     # Tech stack detection from marker files
-│   │   ├── onedrive_finder.py    # Environment-based OneDrive detection
-│   │   └── transfer_engine.py    # Copy/move engine with progress & errors
-│   └── utils/
-│       └── resource_path.py      # PyInstaller path resolver
-├── config/
-│   └── default_exclusions.json   # Default exclusion patterns (extensible)
-├── installer/
-│   └── setup_script.iss          # Inno Setup installer script
-├── build_exe.py                  # PyInstaller build automation
-├── requirements.txt              # Python dependencies
-├── LICENSE                       # MIT License
-└── README.md                     # This file
-```
+## Building from source
 
-## 🛠 Supported Tech Stacks
+If you want to run the code yourself instead of using the pre-built executable:
 
-The app auto-detects and excludes build artifacts for:
+1. Clone the repository
+2. Set up a virtual environment: `python -m venv venv`
+3. Activate it: `venv\Scripts\activate`
+4. Install requirements: `pip install -r requirements.txt`
+5. Run it: `python src/app.py`
 
-| Tech Stack | Detected By | Excluded |
-|---|---|---|
-| JavaScript / Node.js | `package.json`, `yarn.lock` | `node_modules`, `.next`, `.nuxt`, `dist`, `.cache` |
-| TypeScript | `tsconfig.json` | `node_modules`, `dist`, `build` |
-| Python | `requirements.txt`, `pyproject.toml` | `venv`, `.venv`, `__pycache__`, `.tox`, `.mypy_cache` |
-| Java / Kotlin | `pom.xml`, `build.gradle` | `target`, `build`, `out`, `.gradle` |
-| C# / .NET | `*.csproj`, `*.sln` | `bin`, `obj`, `packages`, `.vs` |
-| C / C++ | `CMakeLists.txt`, `Makefile` | `build`, `cmake-build-*`, `Debug`, `Release` |
-| Rust | `Cargo.toml` | `target` |
-| Go | `go.mod` | `vendor` |
-| Flutter / Dart | `pubspec.yaml` | `.dart_tool`, `build`, `ios/Pods` |
-| Ruby | `Gemfile` | `vendor/bundle`, `.bundle` |
-| PHP | `composer.json` | `vendor` |
-| Swift / iOS | `Package.swift`, `Podfile` | `DerivedData`, `Pods` |
-| Android | `build.gradle`, `gradlew` | `.gradle`, `build`, `app/build` |
-| Unity | `ProjectSettings/` | `Library`, `Temp`, `Obj` |
-| Unreal Engine | `*.uproject` | `Binaries`, `Intermediate` |
-| Terraform | `main.tf`, `*.tf` | `.terraform`, `*.tfstate` |
+To build the executable yourself, just run `python build_exe.py` after installing the requirements.
 
-> **Note:** `.git` and `.vscode` are **NOT excluded** by default — these are useful folders you typically want to keep. You can add them manually if desired.
+## Project Structure
 
-## 🤝 Contributing
+If you're interested in how the application is built, here is a quick overview of the main files and what they do:
 
-1. Fork the repo
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License — see [LICENSE](LICENSE) for details.
+- `src/app.py`: The main entry point of the application. It handles the initial launch and the first-run configuration wizard.
+- `src/ui/`: Contains all the graphical interface components.
+  - `main_window.py`: The primary window where you drag and drop files.
+  - `settings_dialog.py`: The window where you manage your exclusion rules.
+  - `transfer_queue.py`: The interface that displays active and queued transfers.
+- `src/core/`: Contains the underlying logic.
+  - `exclusion_manager.py`: Handles the rules for what gets skipped during a transfer.
+  - `stack_detector.py`: Scans project folders to figure out what programming language they use.
+  - `transfer_engine.py`: The engine that safely copies or moves files in the background and reports progress.
+- `config/default_exclusions.json`: A list of the default, built-in rules for what files to skip for each language.
+- `build_exe.py`: A helper script that uses PyInstaller to bundle the application into a standalone executable.

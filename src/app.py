@@ -22,6 +22,19 @@ from src.ui.main_window import MainWindow
 from src.ui.theme_manager import theme_manager
 
 
+def get_app_dir() -> str:
+    """Get the directory where the application is running from."""
+    if getattr(sys, "frozen", False):
+        return os.path.dirname(sys.executable)
+    else:
+        return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def get_pointer_path() -> str:
+    """Get the path to the configuration pointer file."""
+    return os.path.join(get_app_dir(), "ost_config_path.txt")
+
+
 def run_first_setup(config: ConfigManager) -> None:
     """Run the first-time setup wizard.
 
@@ -45,15 +58,35 @@ def run_first_setup(config: ConfigManager) -> None:
     # Step 1: Tell user about settings
     messagebox.showinfo(
         "Welcome to OneDrive Smart Transfer",
-        "Welcome! Before we begin, we need to locate your OneDrive folder.\n\n"
-        "Your settings and exclusions will be saved automatically.",
+        "Welcome! Before we begin, we need to choose where to save your configuration.\n\n"
+        "It is recommended to select a folder inside your OneDrive so your settings sync across computers.",
         parent=root,
     )
+    
+    # Prompt for config directory
+    config_dir = filedialog.askdirectory(
+        title="Select Folder to Save Configuration",
+        parent=root,
+    )
+    
+    if not config_dir:
+        # Fallback to local app data if user cancels
+        config_dir = config.get_default_config_dir()
+        messagebox.showinfo("Default Used", f"Using default location:\n{config_dir}", parent=root)
 
-    default_dir = config.get_default_config_dir()
-    os.makedirs(default_dir, exist_ok=True)
-    config_path = os.path.join(default_dir, "onedrive_smart_transfer_config.json")
+    os.makedirs(config_dir, exist_ok=True)
+    config_path = os.path.join(config_dir, "onedrive_smart_transfer_config.json")
     config.config_path = config_path
+
+    # Save a pointer file next to the EXE
+    pointer_path = get_pointer_path()
+    try:
+        with open(pointer_path, "w", encoding="utf-8") as f:
+            f.write(config_path)
+    except OSError:
+        # If we can't write next to the EXE (e.g., Program Files), silently ignore
+        # and rely on the fallback mechanism or default paths.
+        pass
 
     # Step 2: Detect and confirm OneDrive path
     detected = detect_onedrive_path()
@@ -99,16 +132,29 @@ def run_first_setup(config: ConfigManager) -> None:
 def find_existing_config() -> str | None:
     """Try to find an existing config file.
 
-    Checks the default config directory for an existing config.
+    Checks the pointer file next to the EXE. Falls back to default config dir.
 
     Returns:
         Path to the config file if found, None otherwise.
     """
+    # 1. Check pointer file
+    pointer_path = get_pointer_path()
+    if os.path.isfile(pointer_path):
+        try:
+            with open(pointer_path, "r", encoding="utf-8") as f:
+                saved_path = f.read().strip()
+            if os.path.isfile(saved_path):
+                return saved_path
+        except OSError:
+            pass
+
+    # 2. Check default fallback
     config = ConfigManager()
     default_dir = config.get_default_config_dir()
     default_path = os.path.join(default_dir, "onedrive_smart_transfer_config.json")
     if os.path.isfile(default_path):
         return default_path
+        
     return None
 
 
