@@ -18,22 +18,22 @@ from tkinter import messagebox, filedialog
 from tkinterdnd2 import TkinterDnD
 from typing import Optional
 
-from src.core.config_manager import ConfigManager
-from src.core.exclusion_manager import ExclusionManager
-from src.core.onedrive_finder import detect_onedrive_path
-from src.core.transfer_engine import (
+from onedrivesmarttransfer.core.config_manager import ConfigManager
+from onedrivesmarttransfer.core.exclusion_manager import ExclusionManager
+from onedrivesmarttransfer.core.onedrive_finder import detect_onedrive_path
+from onedrivesmarttransfer.core.transfer_engine import (
     TransferEngine,
     TransferAction,
     TransferState,
     TransferProgress,
     ErrorAction,
 )
-from src.ui.drop_zone import DropZone
-from src.ui.file_explorer import SourceExplorer, DestinationExplorer
-from src.ui.transfer_queue import TransferQueue
-from src.ui.transfer_summary import TransferSummaryWidget
-from src.ui.settings_dialog import SettingsDialog
-from src.ui.theme_manager import theme_manager
+from onedrivesmarttransfer.ui.drop_zone import DropZone
+from onedrivesmarttransfer.ui.file_explorer import SourceExplorer, DestinationExplorer
+from onedrivesmarttransfer.ui.transfer_queue import TransferQueue
+from onedrivesmarttransfer.ui.transfer_summary import TransferSummaryWidget
+from onedrivesmarttransfer.ui.settings_dialog import SettingsDialog
+from onedrivesmarttransfer.ui.theme_manager import theme_manager
 
 
 class MainWindow(ctk.CTk, TkinterDnD.DnDWrapper):
@@ -62,7 +62,7 @@ class MainWindow(ctk.CTk, TkinterDnD.DnDWrapper):
 
         import sys
         import ctypes
-        from src.utils.resource_path import resource_path
+        from onedrivesmarttransfer.utils.resource_path import resource_path
 
         # Set AppUserModelID so Windows groups the taskbar icon correctly
         if sys.platform == "win32":

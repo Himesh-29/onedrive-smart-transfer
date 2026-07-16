@@ -41,7 +41,7 @@ def build():
         "--add-data", f"{os.path.join(project_root, 'assets')};assets",
         "--name", "OneDriveSmartTransfer",
         "--clean",
-        os.path.join(project_root, "src", "app.py"),
+        os.path.join(project_root, "onedrivesmarttransfer", "app.py"),
     ]
 
     # Add icon if it exists

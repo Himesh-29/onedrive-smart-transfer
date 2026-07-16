@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "onedrive-smart-transfer"
+version = "1.0.0"
+description = "A Windows desktop application for transferring project files to OneDrive while automatically excluding bloated build artifacts."
+readme = "README.md"
+authors = [
+    { name = "Himesh Maniyar", email = "himeshmaniyar2017@gmail.com" }
+]
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+dependencies = [
+    "customtkinter",
+    "tkinterdnd2",
+    "darkdetect"
+]
+
+[project.urls]
+Homepage = "https://github.com/Himesh-29/onedrive-smart-transfer"
+Repository = "https://github.com/Himesh-29/onedrive-smart-transfer"
+
+[project.scripts]
+onedrivesmarttransfer = "onedrivesmarttransfer.app:main"
+
+[tool.setuptools.packages.find]
+include = ["onedrivesmarttransfer*"]
+
+[tool.setuptools.package-data]
+"*" = ["config/*", "assets/*"]

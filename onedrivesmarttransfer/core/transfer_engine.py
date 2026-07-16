@@ -20,7 +20,7 @@ from enum import Enum
 from dataclasses import dataclass, field
 from typing import Optional, Callable
 
-from src.core.exclusion_manager import should_exclude_dir, should_exclude_file
+from onedrivesmarttransfer.core.exclusion_manager import should_exclude_dir, should_exclude_file
 
 
 class TransferAction(Enum):

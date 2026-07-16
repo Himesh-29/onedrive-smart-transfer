@@ -10,7 +10,7 @@ import os
 import fnmatch
 from typing import Optional
 
-from src.core.exclusion_manager import load_default_exclusions
+from onedrivesmarttransfer.core.exclusion_manager import load_default_exclusions
 
 
 def detect_stacks(folder_path: str, max_depth: int = 2) -> list[str]:

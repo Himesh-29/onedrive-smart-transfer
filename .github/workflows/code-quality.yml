@@ -32,17 +32,18 @@ jobs:
         id: pylint
         continue-on-error: true
         run: |
-          pylint --exit-zero --output-format=parseable src/ > pylint-results.txt 2>&1 || true
+          pylint --exit-zero --output-format=parseable onedrivesmarttransfer/ > pylint-results.txt 2>&1 || true
           cat pylint-results.txt
 
       - name: Run Radon (complexity analysis)
         id: radon
         run: |
           echo "=== Cyclomatic Complexity ===" > radon-results.txt
-          radon cc -a -n B src/ >> radon-results.txt 2>&1 || true
+          radon cc -a -n B onedrivesmarttransfer/ >> radon-results.txt 2>&1 || true
           echo "" >> radon-results.txt
-          echo "=== Maintenance Index ===" >> radon-results.txt
-          radon mi -n B src/ >> radon-results.txt 2>&1 || true
+          echo "=============================================" >> radon-results.txt
+          echo "Maintainability Index (MI):" >> radon-results.txt
+          radon mi -n B onedrivesmarttransfer/ >> radon-results.txt 2>&1 || true
           cat radon-results.txt
 
       - name: Upload code quality reports

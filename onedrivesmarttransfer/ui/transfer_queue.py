@@ -12,7 +12,7 @@ Shows a list of active and queued transfer jobs, each with:
 import customtkinter as ctk
 from typing import Optional, Callable
 
-from src.core.transfer_engine import TransferProgress, TransferState, ErrorAction
+from onedrivesmarttransfer.core.transfer_engine import TransferProgress, TransferState, ErrorAction
 
 def format_size(size_bytes: int) -> str:
     """Format a byte count into a human-readable string."""

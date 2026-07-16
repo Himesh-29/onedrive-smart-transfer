@@ -12,9 +12,9 @@ import customtkinter as ctk
 from PIL import Image, ImageDraw, ImageFont, ImageTk
 from typing import Optional, Callable
 
-from src.core.exclusion_manager import ExclusionManager
-from src.core.stack_detector import detect_stacks, get_stack_display_names
-from src.ui.theme_manager import theme_manager
+from onedrivesmarttransfer.core.exclusion_manager import ExclusionManager
+from onedrivesmarttransfer.core.stack_detector import detect_stacks, get_stack_display_names
+from onedrivesmarttransfer.ui.theme_manager import theme_manager
 
 
 class IconManager:

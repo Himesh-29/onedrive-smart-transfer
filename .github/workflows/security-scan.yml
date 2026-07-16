@@ -73,7 +73,7 @@ jobs:
 
       - name: Run Bandit
         run: |
-          bandit -r src/ -f json -o bandit-results.json --severity-level medium || true
+          bandit -r onedrivesmarttransfer/ -f json -o bandit-results.json --severity-level medium || true
 
       - name: Upload Bandit report
         if: always()

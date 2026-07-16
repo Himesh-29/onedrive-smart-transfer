@@ -11,7 +11,7 @@ import os
 import fnmatch
 from typing import Optional
 
-from src.utils.resource_path import resource_path
+from onedrivesmarttransfer.utils.resource_path import resource_path
 
 
 # Cache for the default exclusions so we don't re-read from disk each time

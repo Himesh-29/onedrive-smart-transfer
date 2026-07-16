@@ -15,7 +15,7 @@ import customtkinter as ctk
 from tkinter import filedialog, messagebox
 from typing import Optional, Callable
 
-from src.core.exclusion_manager import ExclusionManager
+from onedrivesmarttransfer.core.exclusion_manager import ExclusionManager
 
 
 class SettingsDialog(ctk.CTkToplevel):

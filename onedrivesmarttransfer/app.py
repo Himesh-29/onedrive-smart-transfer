@@ -11,15 +11,15 @@ import os
 import sys
 
 # Ensure the project root is in the Python path
-# This allows imports like `from src.core.config_manager import ConfigManager`
+# This allows imports like `from onedrivesmarttransfer.core.config_manager import ConfigManager`
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.core.config_manager import ConfigManager
-from src.core.onedrive_finder import detect_onedrive_path
-from src.ui.main_window import MainWindow
-from src.ui.theme_manager import theme_manager
+from onedrivesmarttransfer.core.config_manager import ConfigManager
+from onedrivesmarttransfer.core.onedrive_finder import detect_onedrive_path
+from onedrivesmarttransfer.ui.main_window import MainWindow
+from onedrivesmarttransfer.ui.theme_manager import theme_manager
 
 
 def get_app_dir() -> str:
