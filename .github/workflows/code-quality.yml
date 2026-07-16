@@ -1,0 +1,56 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [main, develop, "feature-*"]
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+jobs:
+  code-quality:
+    name: Code Quality Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pylint radon
+
+      - name: Run Pylint
+        id: pylint
+        continue-on-error: true
+        run: |
+          pylint --exit-zero --output-format=parseable src/ > pylint-results.txt 2>&1 || true
+          cat pylint-results.txt
+
+      - name: Run Radon (complexity analysis)
+        id: radon
+        run: |
+          echo "=== Cyclomatic Complexity ===" > radon-results.txt
+          radon cc -a -n B src/ >> radon-results.txt 2>&1 || true
+          echo "" >> radon-results.txt
+          echo "=== Maintenance Index ===" >> radon-results.txt
+          radon mi -n B src/ >> radon-results.txt 2>&1 || true
+          cat radon-results.txt
+
+      - name: Upload code quality reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-quality-reports
+          path: |
+            pylint-results.txt
+            radon-results.txt
+          retention-days: 30
