@@ -1,5 +1,14 @@
 # OneDrive Smart Transfer
 
+<p align="center">
+  <a href="https://pypi.org/project/onedrive-smart-transfer/"><img src="https://img.shields.io/pypi/v/onedrive-smart-transfer.svg?color=blue" alt="PyPI version"></a>&nbsp;
+  <a href="https://pypi.org/project/onedrive-smart-transfer/"><img src="https://img.shields.io/pepy/dt/onedrive-smart-transfer.svg?color=blue" alt="PyPI downloads"></a>&nbsp;
+  <a href="https://github.com/Himesh-29/onedrive-smart-transfer/stargazers"><img src="https://img.shields.io/github/stars/Himesh-29/onedrive-smart-transfer.svg?color=gold" alt="GitHub stars"></a>&nbsp;
+  <a href="https://github.com/Himesh-29/onedrive-smart-transfer/network/members"><img src="https://img.shields.io/github/forks/Himesh-29/onedrive-smart-transfer.svg" alt="GitHub forks"></a>&nbsp;
+  <a href="https://github.com/Himesh-29/onedrive-smart-transfer/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Himesh-29/onedrive-smart-transfer.svg" alt="License"></a>&nbsp;
+  <img src="https://komarev.com/ghpvc/?username=Himesh-29-onedrive-smart-transfer&style=flat&color=blue&label=VISITORS" alt="Visitors">
+</p>
+
 A simple Windows app to copy your coding projects to OneDrive without backing up all the heavy build files. It automatically skips folders like `node_modules`, `venv`, and `build` so your OneDrive doesn't fill up instantly.
 
 ![App Demo](https://raw.githubusercontent.com/Himesh-29/onedrive-smart-transfer/main/assets/docs/Transfer%20Completed.png)
