@@ -82,14 +82,22 @@ To build the executable yourself, just run `python build_exe.py` after installin
 
 If you're interested in how the application is built, here is a quick overview of the main files and what they do:
 
+- `build_exe.py`: A helper script that uses PyInstaller to bundle the application into a standalone executable.
+- `config/default_exclusions.json`: A list of the default, built-in rules for what files to skip for each language.
 - `src/app.py`: The main entry point of the application. It handles the initial launch and the first-run configuration wizard.
 - `src/ui/`: Contains all the graphical interface components.
   - `main_window.py`: The primary window where you drag and drop files.
+  - `drop_zone.py`: Handles the drag-and-drop mechanics and visual feedback.
+  - `file_explorer.py`: A widget that displays the preview tree of files to be transferred.
   - `settings_dialog.py`: The window where you manage your exclusion rules.
+  - `theme_manager.py`: Controls switching between light and dark modes.
   - `transfer_queue.py`: The interface that displays active and queued transfers.
+  - `transfer_summary.py`: Displays a pop-up summary after a transfer completes.
 - `src/core/`: Contains the underlying logic.
+  - `config_manager.py`: Handles loading and saving your preferences and rules to disk.
   - `exclusion_manager.py`: Handles the rules for what gets skipped during a transfer.
+  - `onedrive_finder.py`: Automatically detects where OneDrive is installed on your system.
   - `stack_detector.py`: Scans project folders to figure out what programming language they use.
   - `transfer_engine.py`: The engine that safely copies or moves files in the background and reports progress.
-- `config/default_exclusions.json`: A list of the default, built-in rules for what files to skip for each language.
-- `build_exe.py`: A helper script that uses PyInstaller to bundle the application into a standalone executable.
+- `src/utils/`: Contains small helper utilities.
+  - `resource_path.py`: Helper utility that ensures file paths work properly whether running from source or from the compiled executable.
