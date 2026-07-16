@@ -70,7 +70,10 @@
       "htmlcov",
       ".hypothesis",
       ".pytype",
-      "site-packages"
+      "site-packages",
+      "dist",
+      "build",
+      "_internal"
     ],
     "exclude_files": [
       "*.pyc",
