@@ -2,12 +2,11 @@
 
 A simple Windows app to copy your coding projects to OneDrive without backing up all the heavy build files. It automatically skips folders like `node_modules`, `venv`, and `build` so your OneDrive doesn't fill up instantly.
 
-![App Demo GIF](https://github.com/placeholder-demo-gif.gif)
-*(Placeholder: Upload a short GIF of a transfer here)*
+![App Demo](https://github.com/user-attachments/assets/4fd5fb87-206f-4494-9d8a-6036497f8567)
 
 ## Why this exists
 
-When you sync programming projects to OneDrive, it usually tries to upload thousands of tiny files from dependency folders. This takes forever and wastes space. This app detects what kind of project you're dropping in and automatically filters out the junk before transferring. 
+When you sync programming projects to OneDrive, it usually tries to upload thousands of tiny files from dependency folders. This takes forever and wastes space. This app detects what kind of project you're dropping in and automatically filters out the junk before transferring.
 
 Everything runs completely offline on your machine. No data is sent anywhere.
 
@@ -27,33 +26,35 @@ Everything runs completely offline on your machine. No data is sent anywhere.
 ## Setup and Usage
 
 **Step 1: Download and Run**
-Grab the latest `OneDriveSmartTransfer-Windows.zip` from the Releases page, extract it, and double-click `OneDriveSmartTransfer.exe`. There is no installer.
+Grab the latest `OneDriveSmartTransfer-Windows.zip` from the Releases page, extract the folder to a location of your choice, and double-click `OneDriveSmartTransfer.exe`. Because this is a portable application, there is no installation wizard.
 
-**Step 2: First-Time Configuration**
-When you open it for the first time, the app will ask where you want to save its configuration files. It's usually best to select a folder inside your OneDrive so your settings are backed up and synced across your computers.
+**Step 2: First-Time Configuration (Portable Mode)**
+When you launch the app for the very first time, it will prompt you to choose a folder to save your configuration file. We recommend selecting a folder inside your OneDrive so that your settings automatically sync across all your computers.
 
-![Welcome Screen](https://github.com/user-attachments/assets/8abc35c5-30a4-41c1-9ab1-fb2f532307e2)
+_How it works behind the scenes:_ Because this app is fully portable and respects your privacy (no Registry entries or hidden AppData files), it will generate a tiny text file named `ost_config_path.txt` right next to the `.exe` file. This file acts as a simple pointer so the application remembers where you decided to save your settings on this specific computer. If you ever want to reset the application, simply delete this text file!
+
 ![Configuration File Setup Location](https://github.com/user-attachments/assets/8abc35c5-30a4-41c1-9ab1-fb2f532307e2)
+![OneDrive Location Detection/Updation](https://github.com/user-attachments/assets/5b942994-a776-4772-8860-2057f8b450d9)
 
+**Step 3: Main Window Preview**
+Drag and drop your project folder directly into the main window. The application will instantly scan the folder to detect what programming language it uses (like Node.js or Python).
 
-**Step 3: Transferring Files**
-Drag and drop your project folder directly into the main window. 
+![Main Window Placeholder](https://github.com/user-attachments/assets/e2903b8b-19ce-4bd7-b305-d10e1bbc8f4d)
 
-![Main Window Placeholder](https://github.com/placeholder-main-window.png)
-*(Placeholder: Screenshot of the main drop zone)*
+**Step 4: Choose a Destination**
+Select a destination folder inside your local OneDrive directory. This is where your cleaned-up project will be copied or moved to.
 
-**Step 4: Choose Destination**
-Select where inside your OneDrive you want the project to go.
+**Step 5: Review and Transfer**
+Before doing anything, the application will show you a preview tree of exactly which files it plans to transfer and which heavy build folders (like `node_modules` or `venv`) it plans to skip. Once you're satisfied, click start to begin the background transfer process!
 
-**Step 5: Review and Start**
-The app will show you exactly which files it's going to transfer and which ones it's going to skip. You can edit the exclusion list in the settings if you need to. Click start when you're ready.
-
-![Settings Placeholder](https://github.com/placeholder-settings-screen.png)
-*(Placeholder: Screenshot of the settings/exclusion rules window)*
+![Settings General Window](https://github.com/user-attachments/assets/a303ec2e-102c-44a7-a5d7-fe4f554a2951)
+![Settings Exclusions Window](https://github.com/user-attachments/assets/06d04bb2-4bb9-4d0c-8f57-4dcdc4aa4887)
+![Transfer Completed](https://github.com/user-attachments/assets/4fd5fb87-206f-4494-9d8a-6036497f8567)
 
 ## Supported Projects
 
 The app automatically recognizes and filters out build files for:
+
 - Node.js / JavaScript (`node_modules`, `.next`, etc)
 - Python (`venv`, `__pycache__`, `dist`, etc)
 - Java (`target`, `build`, etc)
