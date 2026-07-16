@@ -36,5 +36,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: OneDriveSmartTransfer-Windows
-          path: dist/OneDriveSmartTransfer/OneDriveSmartTransfer.exe
+          path: dist/OneDriveSmartTransfer/
           retention-days: 30
