@@ -12,3 +12,7 @@
 
 For architectural details, see `references/architecture.md`.
 For recent context and chat history, see `references/history.md`.
+
+## 🌳 Git & Branching Rules
+1. **Never Force Push**: Never use `git push -f` or force push under any circumstances. If a commit needs to be amended and has already been pushed, create a new commit instead or let the user handle it.
+2. **Never Push to Main Directly**: Always follow the PR (Pull Request) workflow. Commit to a feature branch, push the feature branch, and let the user review and merge via PR. Do not `git push origin main` directly.
