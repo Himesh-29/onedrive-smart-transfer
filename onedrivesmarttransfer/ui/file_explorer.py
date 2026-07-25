@@ -241,8 +241,10 @@ class SourceExplorer(LazyFileTree):
 
     def _get_root_exclusions(self, path: str) -> dict:
         """Find the exclusion rules applicable to a path by finding its root."""
+        norm_path = os.path.normcase(os.path.normpath(path))
         for root, exclusions in self._root_exclusions.items():
-            if path.startswith(root):
+            norm_root = os.path.normcase(os.path.normpath(root))
+            if norm_path.startswith(norm_root):
                 return exclusions
         return {"dirs": [], "files": []}
 

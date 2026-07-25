@@ -13,7 +13,7 @@ from typing import Optional
 from onedrivesmarttransfer.core.exclusion_manager import load_default_exclusions
 
 
-def detect_stacks(folder_path: str, max_depth: int = 2) -> list[str]:
+def detect_stacks(folder_path: str, max_depth: int = 100) -> list[str]:
     """Detect which tech stacks a project folder uses.
 
     Scans only file names (never contents) in the top levels of the folder
@@ -22,7 +22,7 @@ def detect_stacks(folder_path: str, max_depth: int = 2) -> list[str]:
     Args:
         folder_path: Path to the project folder to analyze.
         max_depth: How many levels deep to search for marker files.
-                   Default is 2 (root + one level of subdirectories).
+                   Default is 100 (root + two levels of subdirectories).
 
     Returns:
         List of detected category IDs (e.g., ["javascript_node", "python"]).
@@ -33,30 +33,25 @@ def detect_stacks(folder_path: str, max_depth: int = 2) -> list[str]:
     defaults = load_default_exclusions()
     detected = set()
 
-    # Collect all filenames in the top levels
+    # Collect all filenames in the top levels up to max_depth
     filenames_in_project = set()
+    folder_path = os.path.abspath(folder_path)
+    
     try:
-        for depth_level in range(max_depth):
-            if depth_level == 0:
-                # Root level
-                try:
-                    for entry in os.listdir(folder_path):
-                        filenames_in_project.add(entry)
-                except OSError:
-                    pass
+        for dirpath, dirnames, files in os.walk(folder_path):
+            # Calculate current depth relative to the root folder
+            rel_path = os.path.relpath(dirpath, folder_path)
+            if rel_path == '.':
+                depth = 0
             else:
-                # One level deeper — check immediate subdirectories
-                try:
-                    for entry in os.listdir(folder_path):
-                        subdir = os.path.join(folder_path, entry)
-                        if os.path.isdir(subdir):
-                            try:
-                                for sub_entry in os.listdir(subdir):
-                                    filenames_in_project.add(sub_entry)
-                            except OSError:
-                                pass
-                except OSError:
-                    pass
+                depth = len(rel_path.split(os.sep))
+            
+            # If we've reached the max depth, stop descending into subdirectories
+            if depth >= max_depth:
+                dirnames.clear()
+                
+            for f in files:
+                filenames_in_project.add(f)
     except OSError:
         pass
 

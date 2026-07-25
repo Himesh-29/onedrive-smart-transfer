@@ -160,12 +160,10 @@ class ExclusionManager:
                 if f not in disabled:
                     exclude_files.add(f)
 
-            # User-added patterns — treat as dirs unless they contain wildcards
+            # User-added patterns — add to both sets so they match dirs OR files
             for p in added:
-                if "*" in p or "." in p:
-                    exclude_files.add(p)
-                else:
-                    exclude_dirs.add(p)
+                exclude_files.add(p)
+                exclude_dirs.add(p)
 
         return {"dirs": exclude_dirs, "files": exclude_files}
 
