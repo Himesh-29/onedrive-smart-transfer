@@ -1,0 +1,204 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop, "feature-*"]
+    tags: ['v*']
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  security-events: write
+  id-token: write  # Mandatory for Trusted Publishing OIDC
+
+jobs:
+  # ==========================================
+  # 1. SECURITY SCANS
+  # ==========================================
+  gitleaks:
+    name: Secret Scanning (Gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+  dependency-scan:
+    name: Dependency Vulnerability Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install pip-audit
+        run: pip install pip-audit
+
+      - name: Scan Python dependencies
+        run: |
+          pip-audit -r requirements.txt --format json --output pip-audit-results.json || true
+
+      - name: Upload pip-audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pip-audit-report
+          path: pip-audit-results.json
+          retention-days: 30
+          if-no-files-found: ignore
+
+  bandit:
+    name: Python Security Lint (Bandit)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Bandit
+        run: pip install bandit[toml]
+
+      - name: Run Bandit
+        run: |
+          bandit -r onedrivesmarttransfer/ -f json -o bandit-results.json --severity-level medium || true
+
+      - name: Upload Bandit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bandit-report
+          path: bandit-results.json
+          retention-days: 30
+          if-no-files-found: ignore
+
+  # ==========================================
+  # 2. CODE QUALITY
+  # ==========================================
+  code-quality:
+    name: Code Quality Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pylint radon
+
+      - name: Run Pylint
+        id: pylint
+        continue-on-error: true
+        run: |
+          pylint --exit-zero --output-format=parseable onedrivesmarttransfer/ > pylint-results.txt 2>&1 || true
+          cat pylint-results.txt
+
+      - name: Run Radon (complexity analysis)
+        id: radon
+        run: |
+          echo "=== Cyclomatic Complexity ===" > radon-results.txt
+          radon cc -a -n B onedrivesmarttransfer/ >> radon-results.txt 2>&1 || true
+          echo "" >> radon-results.txt
+          echo "=============================================" >> radon-results.txt
+          echo "Maintainability Index (MI):" >> radon-results.txt
+          radon mi -n B onedrivesmarttransfer/ >> radon-results.txt 2>&1 || true
+          cat radon-results.txt
+
+      - name: Upload code quality reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-quality-reports
+          path: |
+            pylint-results.txt
+            radon-results.txt
+          retention-days: 30
+
+  # ==========================================
+  # 3. BUILD
+  # ==========================================
+  build-windows:
+    name: Build Windows EXE
+    runs-on: windows-latest
+    # Build on push to main or tags, to verify it compiles successfully
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build EXE
+        run: |
+          python build_exe.py
+
+      - name: Upload EXE Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: OneDriveSmartTransfer-Windows
+          path: dist/OneDriveSmartTransfer/
+          retention-days: 30
+
+  # ==========================================
+  # 4. PUBLISH (Depends on 1, 2, and 3)
+  # ==========================================
+  pypi-publish:
+    name: Upload release to PyPI
+    runs-on: ubuntu-latest
+    environment: pypi
+    # Wait for all checks and the build to pass!
+    needs: [gitleaks, dependency-scan, bandit, code-quality, build-windows]
+    # Only run this step if we are on the main branch
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Build package
+        run: |
+          pip install build
+          python -m build
+
+      - name: Publish package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true
